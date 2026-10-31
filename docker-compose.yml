@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: verityx-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - SUPABASE_URL=https://cfdzutredjuweiszdias.supabase.co
+      - SUPABASE_ANON_KEY=sb_publishable_FuUlPeqUHsG6altp1qcdfg_E48T2Brp
+      - FRONTEND_URL=http://localhost:5173
+      - CORS_ORIGINS=["http://localhost:5173","http://localhost:3000"]
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: verityx-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_SUPABASE_URL=https://cfdzutredjuweiszdias.supabase.co
+      - VITE_SUPABASE_ANON_KEY=sb_publishable_FuUlPeqUHsG6altp1qcdfg_E48T2Brp
+      - VITE_API_BASE_URL=http://localhost:8000/api/v1
+    depends_on:
+      - backend
+    restart: unless-stopped
+
